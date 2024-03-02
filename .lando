@@ -1,0 +1,16 @@
+name: Norton-Owners-Club-composer
+recipe: drupal8
+config:
+  webroot: web
+  php: '7.2'
+  # via: apache:2.4
+  via: nginx
+  database: mysql:5.7
+  drush: ^8
+  xdebug: false
+  config:
+    php: '.lando/php.ini'
+services:
+  appserver:
+    build:
+      - composer install
