@@ -1,0 +1,123 @@
+From 0a75a014155f23022299467740cc2338c3d33b37 Mon Sep 17 00:00:00 2001
+From: johnwalshe <walshejohnnyw7@gmail.com>
+Date: Mon, 11 Mar 2024 10:11:02 +0000
+Subject: [PATCH] change p to br ckeditor
+
+---
+ .gitignore                                    |  4 +
+ .../0001-br-tags-replace-p-in-ckeditor.patch  | 88 +++++++++++++++++++
+ 2 files changed, 92 insertions(+)
+ create mode 100644 patches/0001-br-tags-replace-p-in-ckeditor.patch
+
+diff --git a/.gitignore b/.gitignore
+index e2494a3..66991a6 100644
+--- a/.gitignore
++++ b/.gitignore
+@@ -11,6 +11,10 @@
+ # including Drupal core.
+ core
+ 
++#don't ignore
++!web/core/assets/vendor/ckeditor/pconfig.js
++!core/core.libraries.yml
++
+ # Ignore dependencies that are managed with Composer.
+ # Generally you should only ignore the root vendor directory. It's important
+ # that core/assets/vendor and any other vendor directories within contrib or
+diff --git a/patches/0001-br-tags-replace-p-in-ckeditor.patch b/patches/0001-br-tags-replace-p-in-ckeditor.patch
+new file mode 100644
+index 0000000..5359950
+--- /dev/null
++++ b/patches/0001-br-tags-replace-p-in-ckeditor.patch
+@@ -0,0 +1,88 @@
++From fbd72548ad8f2d581da2bffe55d9dcc30e3719b2 Mon Sep 17 00:00:00 2001
++From: johnwalshe <walshejohnnyw7@gmail.com>
++Date: Mon, 11 Mar 2024 09:51:32 +0000
++Subject: [PATCH] br tags replace p in ckeditor
++
++---
++ web/sites/default/default.settings.php | 48 +++++++++++++++++++++++---
++ 1 file changed, 44 insertions(+), 4 deletions(-)
++
++diff --git a/web/sites/default/default.settings.php b/web/sites/default/default.settings.php
++index 1c8dbee..c5e2b4a 100644
++--- a/web/sites/default/default.settings.php
+++++ b/web/sites/default/default.settings.php
++@@ -105,6 +105,16 @@
++  * webserver.  For most other drivers, you must specify a
++  * username, password, host, and database name.
++  *
+++ * Drupal core implements drivers for mysql, pgsql, and sqlite. Other drivers
+++ * can be provided by contributed or custom modules. To use a contributed or
+++ * custom driver, the "namespace" property must be set to the namespace of the
+++ * driver. The code in this namespace must be autoloadable prior to connecting
+++ * to the database, and therefore, prior to when module root namespaces are
+++ * added to the autoloader. To add the driver's namespace to the autoloader,
+++ * set the "autoload" property to the PSR-4 base directory of the driver's
+++ * namespace. This is optional for projects managed with Composer if the
+++ * driver's namespace is in Composer's autoloader.
+++ *
++  * Transaction support is enabled by default for all drivers that support it,
++  * including MySQL. To explicitly disable it, set the 'transactions' key to
++  * FALSE.
++@@ -224,6 +234,20 @@
++  *     'database' => '/path/to/databasefilename',
++  *   ];
++  * @endcode
+++ *
+++ * Sample Database configuration format for a driver in a contributed module:
+++ * @code
+++ *   $databases['default']['default'] = [
+++ *     'driver' => 'mydriver',
+++ *     'namespace' => 'Drupal\mymodule\Driver\Database\mydriver',
+++ *     'autoload' => 'modules/mymodule/src/Driver/Database/mydriver/',
+++ *     'database' => 'databasename',
+++ *     'username' => 'sqlusername',
+++ *     'password' => 'sqlpassword',
+++ *     'host' => 'localhost',
+++ *     'prefix' => '',
+++ *   ];
+++ * @endcode
++  */
++ 
++ /**
++@@ -741,13 +765,29 @@
++  */
++ $settings['entity_update_backup'] = TRUE;
++ 
+++/**
+++ * Node migration type.
+++ *
+++ * This is used to force the migration system to use the classic node migrations
+++ * instead of the default complete node migrations. The migration system will
+++ * use the classic node migration only if there are existing migrate_map tables
+++ * for the classic node migrations and they contain data. These tables may not
+++ * exist if you are developing custom migrations and do not want to use the
+++ * complete node migrations. Set this to TRUE to force the use of the classic
+++ * node migrations.
+++ */
+++$settings['migrate_node_migrate_type_classic'] = FALSE;
+++
++ /**
++  * Load local development override configuration, if available.
++  *
++- * Use settings.local.php to override variables on secondary (staging,
++- * development, etc) installations of this site. Typically used to disable
++- * caching, JavaScript/CSS compression, re-routing of outgoing emails, and
++- * other things that should not happen on development and testing sites.
+++ * Create a settings.local.php file to override variables on secondary (staging,
+++ * development, etc.) installations of this site.
+++ *
+++ * Typical uses of settings.local.php include:
+++ * - Disabling caching.
+++ * - Disabling JavaScript/CSS compression.
+++ * - Rerouting outgoing emails.
++  *
++  * Keep this code block at the end of this file to take full effect.
++  */
++-- 
++2.34.1
++
+-- 
+2.34.1
+

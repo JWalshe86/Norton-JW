@@ -1,7 +1,7 @@
 From fbd72548ad8f2d581da2bffe55d9dcc30e3719b2 Mon Sep 17 00:00:00 2001
 From: johnwalshe <walshejohnnyw7@gmail.com>
 Date: Mon, 11 Mar 2024 09:51:32 +0000
-Subject: [PATCH] br tags replace p in ckeditor
+Subject: [PATCH 1/2] br tags replace p in ckeditor
 
 ---
  web/sites/default/default.settings.php | 48 +++++++++++++++++++++++---
